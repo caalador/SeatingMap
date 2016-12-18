@@ -8,6 +8,7 @@ import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 import org.percepta.mgrankvi.client.map.CommandObject;
 import org.percepta.mgrankvi.client.map.SeatingMapWidget;
+import org.percepta.mgrankvi.client.room.RoomWidget;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,6 +33,8 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
 
   protected Point position = new Point(0, 0);
   protected Point orgPosition = new Point(0, 0);
+
+  protected List<RoomWidget> rooms = new LinkedList<>();
 
   public RoomContainer() {
     // Dummy
@@ -69,9 +72,10 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
   }
 
   public void add(final Widget widget) {
-//    if (widget instanceof CRoom) {
-//      final CRoom room = (CRoom) widget;
-//      rooms.add(room);
+    if (widget instanceof RoomWidget) {
+      final RoomWidget room = (RoomWidget) widget;
+      rooms.add(room);
+    }
 //    } else if (widget instanceof PathGridItem) {
 //      waypoints = (PathGridItem) widget;
 //    } else if (widget instanceof VisualItem) {
@@ -81,9 +85,9 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
 
   public void paint() {
     final Context2d context = grid.getCanvas().getContext2d();
-//    for (final CRoom room : rooms) {
-//      room.paint(context);
-//    }
+    for (final RoomWidget room : rooms) {
+      room.paint(context);
+    }
 //
 //    for (final VisualItem item : items) {
 //      item.paint(context);
@@ -162,9 +166,9 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
 
   public void pan(final int amountx, final int amounty) {
     movePosition(amountx, amounty);
-//    for (final CRoom room : rooms) {
-//      room.movePosition(amountx, amounty);
-//    }
+    for (final RoomWidget room : rooms) {
+      room.movePosition(amountx, amounty);
+    }
 //
 //    for (final VisualItem item : items) {
 //      item.movePosition(amountx, amounty);
@@ -175,9 +179,9 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
   }
 
   public void scale(final double scale) {
-//    for (final CRoom room : rooms) {
-//      room.scale(scale);
-//    }
+    for (final RoomWidget room : rooms) {
+      room.scale(scale);
+    }
 //
 //    for (final VisualItem item : items) {
 //      item.scale(scale);
@@ -224,9 +228,9 @@ public class RoomContainer extends Widget implements Comparable<RoomContainer> {
   }
 
   public void reset() {
-//    for (final CRoom room : rooms) {
-//      room.reset();
-//    }
+    for (final RoomWidget room : rooms) {
+      room.reset();
+    }
 //
 //    for (final VisualItem item : items) {
 //      item.reset();
