@@ -39,7 +39,7 @@ public class DemoUI extends UI {
     thirdLines = new ImageToLines().getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png",new Point(150,150));
     component.addRoom(1, thirdLines);
     thirdLines = new ImageToLines().getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png",new Point(150,150));
-    component.addRoom(1, thirdLines);
+    component.addLines(1, thirdLines);
 
     // Show it in the middle of the screen
     final VerticalLayout layout = new VerticalLayout();

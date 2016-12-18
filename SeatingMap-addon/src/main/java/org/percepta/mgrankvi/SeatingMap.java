@@ -15,6 +15,17 @@ public class SeatingMap extends AbstractComoponents {
     Map<Integer, FloorMap> floors = Maps.newHashMap();
 
     public void addRoom(int floor, List<Line> lines) {
+        FloorMap map = getFloor(floor);
+        map.addRoom(lines);
+    }
+
+    public void addLines(int floor, List<Line> lines) {
+        FloorMap map = getFloor(floor);
+        map.addLines(lines);
+
+    }
+
+    private FloorMap getFloor(int floor) {
         FloorMap map;
         if (floors.containsKey(floor)) {
             map = floors.get(floor);
@@ -23,8 +34,7 @@ public class SeatingMap extends AbstractComoponents {
             floors.put(floor, map);
             addComponent(map);
         }
-
-        map.addRoom(lines);
+        return map;
     }
 
 }
