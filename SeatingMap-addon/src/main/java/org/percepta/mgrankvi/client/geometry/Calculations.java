@@ -176,4 +176,15 @@ public class Calculations {
     public static boolean isOnSegment(final double xi, final double yi, final double xj, final double yj, final double xk, final double yk) {
         return (xi <= xk || xj <= xk) && (xk <= xi || xk <= xj) && (yi <= yk || yj <= yk) && (yk <= yi || yk <= yj);
     }
+
+    public static int computeDirection(final int xi, final int yi, final int xj, final int yj, final int xk, final int yk) {
+        final int a = (xk - xi) * (yj - yi);
+        final int b = (xj - xi) * (yk - yi);
+        return a < b ? -1 : a > b ? 1 : 0;
+    }
+
+
+    public static Point combine(final Point p1, final Point p2) {
+        return new Point(p1.getX() + p2.getX(), p1.getY() + p2.getY());
+    }
 }

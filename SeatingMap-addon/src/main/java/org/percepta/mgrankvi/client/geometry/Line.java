@@ -37,4 +37,13 @@ public class Line implements Serializable {
     public int hashCode() {
         return super.hashCode();
     }
+
+    /**
+     * Add position as offset to line end points
+     * @param position Offset position
+     * @return Line with endpoints using given offset
+     */
+    public Line add(Point position) {
+        return new Line(Calculations.combine(start, position), Calculations.combine(end, position));
+    }
 }

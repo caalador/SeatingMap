@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 /**
  * @author Mikael Grankvist - Vaadin Ltd
  */
-public class SeatingMapWidget extends Composite implements ClickHandler, MouseDownHandler, MouseUpHandler, MouseMoveHandler, MouseOutHandler, ContextMenuHandler,
+public class SeatingMapWidget extends Composite implements ClickHandler, MouseDownHandler, MouseUpHandler, MouseMoveHandler, MouseOutHandler,
         ChangeHandler, KeyUpHandler {
 
   private static final String CLASSNAME = "c-seating-map";
@@ -83,7 +83,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
   private int downY = 0;
   int zoom = 0;
 
-  boolean isEditable = false;
+//  boolean isEditable = false;
   boolean pathing = false;
   private final FlowPanel content;
 
@@ -107,7 +107,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
     addDomHandler(this, MouseMoveEvent.getType());
     addDomHandler(this, MouseUpEvent.getType());
     addDomHandler(this, ClickEvent.getType());
-    addDomHandler(this, ContextMenuEvent.getType());
     addDomHandler(this, ChangeEvent.getType());
     addDomHandler(this, MouseOutEvent.getType());
     addDomHandler(this, KeyUpEvent.getType());
@@ -259,11 +258,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 
       if (selectedFloor != null) {
         selectedFloor.click(clientX, clientY);
-        if (isEditable) {
-          selectedFloor.clickEditable(clientX, clientY);
-        } else {
           selectedFloor.clickForRoomSelect(downX, downY);
-        }
       }
 //      if (pathing) {
 //        final int x = (int) (clientX - origo.getX());
@@ -498,10 +493,10 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 //        }
 //      }
       switch (cmd.getCommand()) {
-//        case PAN:
-//          pan(cmd.getX(), cmd.getY());
-//          repaint();
-//          break;
+        case PAN:
+          pan(cmd.getX(), cmd.getY());
+          repaint();
+          break;
 //        case EDIT:
 //          setEditable(!isEditable);
 //          break;
@@ -577,102 +572,13 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
     }
   }
 
-  @Override
-  public void onContextMenu(final ContextMenuEvent event) {
-    if (!isEditable || selectedFloor == null) {
-      return;
-    }
-    event.preventDefault();
-    mouseDown = false;
-    // selectedFloor.selected = null;
-
-    final int x = event.getNativeEvent().getClientX();
-    final int y = event.getNativeEvent().getClientY();
-
-    final MenuBar rootMenu = new MenuBar(true);
-//    final MenuBar roomMenu = new MenuBar(true);
-//
-//    final MenuItem triangle = new MenuItem("3 corners", selectedFloor.addCommand(3, x, y));
-//    final MenuItem square = new MenuItem("4 corners", selectedFloor.addCommand(4, x, y));
-//    final MenuItem fivePoints = new MenuItem("5 corners", selectedFloor.addCommand(5, x, y));
-//    final MenuItem LShape = new MenuItem("L shaped 6 corners", selectedFloor.addCommand(6, x, y));
-//
-//    roomMenu.addItem(triangle);
-//    roomMenu.addItem(square);
-//    roomMenu.addItem(fivePoints);
-//    roomMenu.addItem(LShape);
-//
-//    final MenuItem newRoom = new MenuItem("Add new room", roomMenu);
-//    rootMenu.addItem(newRoom);
-
-    rootMenu.setVisible(true);
-    contextMenu = new PopupPanel();
-    contextMenu.add(rootMenu);
-
-//    Style style = rootMenu.getElement().getStyle();
-//    style.setProperty("backgroundColor", "gray");
-//    style.setProperty("borderColor", "gray");
-//    style.setProperty("borderWidth", "1px 3px 3px 1px");
-//    style.setProperty("borderStyle", "solid");
-//
-//    style = roomMenu.getElement().getStyle();
-//    style.setProperty("backgroundColor", "gray");
-//    style.setProperty("borderColor", "gray");
-//    style.setProperty("borderWidth", "1px 3px 3px 1px");
-//    style.setProperty("borderStyle", "solid");
-//
-//    selectedFloor.checkForRemoveAndAddItem(rootMenu);
-//
-//    rootMenu.addItem(new MenuItem("Push states to server", new Command() {
-//      @Override
-//      public void execute() {
-//        fireEvent(new MenuEvent(MenuEvent.MenuEventType.UPDATE_ROOMS));
-//        contextMenu.hide();
-//        contextMenu = null;
-//      }
-//    }));
-//
-//    rootMenu.addItem(new MenuItem("New table", new Command() {
-//      @Override
-//      public void execute() {
-//        if (codePopup == null) {
-//          codePopup = new GeneratedCodePopup();
-//        }
-//        final CRoom room = selectedFloor.getSelectedRoom();
-//        if (room != null) {
-//          codePopup.addLabel("Table table = new Table(\"Name\", new Point(" + (x - (room.getPositionX() - offsetX)) + ", "
-//                  + (y - (room.getPositionY() - offsetY)) + "));");
-//          final CTable table = new CTable(Arrays.asList(new Rectangle(150, 50).getCorners()), new Point(x - (room.getPositionX() - offsetX), y
-//                  - (room.getPositionY() - offsetY)));
-//          room.add(table);
-//          repaint();
-//        } else {
-//          codePopup.addLabel("Table table = new Table(\"Name\", new Point(" + (x - origo.getX()) + ", " + (y - origo.getY()) + "));");
-//        }
-//        codePopup.addLabel("table.setSize(150, 50);");
-//        contextMenu.hide();
-//        contextMenu = null;
-//      }
-//    }));
-
-    contextMenu.setPopupPosition(x, y);
-    contextMenu.show();
-  }
 
   @Override
   public void onMouseOut(final MouseOutEvent event) {
     mouseDown = false;
     if (selectedFloor != null) {
-      selectedFloor.setSelected(null);
+//      selectedFloor.setSelected(null);
     }
-  }
-
-  public void setEditable(final boolean editable) {
-    isEditable = editable;
-//    if (codePopup != null) {
-//      codePopup.hide();
-//      codePopup = null;
-//    }
   }
 
   public void setPathing(final boolean pathing) {
