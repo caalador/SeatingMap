@@ -39,22 +39,9 @@ public abstract class Item extends Widget {
     }
 
     public void paint(Context2d context) {
-        if(shadow) {
-            context.save();
-            context.setStrokeStyle(CssColor.make("TEAL"));
-
-            for (Line l : lines) {
-                context.beginPath();
-                context.moveTo(position.getX() + l.start.getX()+1, position.getY() + l.start.getY()+1);
-                context.lineTo(position.getX() + l.end.getX()+1, position.getY() + l.end.getY()+1);
-                context.closePath();
-                context.stroke();
-            }
-            context.restore();
-        }
-
         context.save();
         context.setStrokeStyle(CssColor.make("BLACK"));
+        context.setGlobalCompositeOperation(Context2d.Composite.DESTINATION_OVER);
 
         for (Line l : lines) {
             context.beginPath();
@@ -65,6 +52,20 @@ public abstract class Item extends Widget {
         }
         context.restore();
 
+        if(shadow) {
+            context.save();
+            context.setStrokeStyle(CssColor.make("TEAL"));
+            context.setGlobalCompositeOperation(Context2d.Composite.DESTINATION_OVER);
+
+            for (Line l : lines) {
+                context.beginPath();
+                context.moveTo(position.getX() + l.start.getX()+1, position.getY() + l.start.getY()+1);
+                context.lineTo(position.getX() + l.end.getX()+1, position.getY() + l.end.getY()+1);
+                context.closePath();
+                context.stroke();
+            }
+            context.restore();
+        }
     }
 
     public void setPosition(final Point position) {

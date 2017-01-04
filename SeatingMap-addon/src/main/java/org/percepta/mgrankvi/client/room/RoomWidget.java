@@ -38,6 +38,23 @@ public class RoomWidget extends Targetable {
             table.movePosition(amountx, amounty);
         }
     }
+
+    @Override
+    public void scale(double scale) {
+        super.scale(scale);
+        for (final TableWidget table : tables) {
+            table.scale(scale);
+        }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        for (final TableWidget table : tables) {
+            table.reset();
+        }
+    }
+
     public void paint(Context2d context) {
         super.paint(context);
 
@@ -48,7 +65,13 @@ public class RoomWidget extends Targetable {
 
     public void checkHover(final double clientX, final double clientY) {
         for (final TableWidget table : tables) {
-            table.setPaintName(table.pointInObject(clientX, clientY));
+            boolean paintName = table.pointInObject(clientX, clientY);
+            table.setPaintName(paintName);
+            // We can only hover on one table if correctly built map
+            if (paintName) {
+                setShadow(false);
+                break;
+            }
         }
     }
 }

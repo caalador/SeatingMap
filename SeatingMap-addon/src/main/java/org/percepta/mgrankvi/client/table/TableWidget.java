@@ -25,6 +25,7 @@ public class TableWidget extends Targetable {
 
     public void setPaintName(boolean paintName) {
         this.paintName = paintName;
+        setShadow(paintName);
     }
 
     @Override

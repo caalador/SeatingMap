@@ -10,6 +10,10 @@ public class DrawUtil {
     public static final double FULL_CIRCLE = 2 * Math.PI;
 
     public static void drawGrid(Context2d g, int width, int height, String bg, int stepSize) {
+        g.save();
+
+        g.setGlobalCompositeOperation(Context2d.Composite.SOURCE_OUT);
+
         // Background
         g.setFillStyle(bg);
         g.fillRect(0, 0, width + 1, height + 1);
@@ -27,6 +31,8 @@ public class DrawUtil {
             g.lineTo(width, x);
         }
         g.stroke();
+
+        g.restore();
 
     }
 

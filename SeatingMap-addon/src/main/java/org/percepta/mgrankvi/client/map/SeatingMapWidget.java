@@ -156,7 +156,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
   private void paint() {
     final Context2d context = canvas.getContext2d();
 
-    GridUtils.paintGrid(context, new Point(offsetX, offsetY), gridSize, origo);
     GridUtils.paintZoomInButton(context, plus.getPosition(), plus.getSize(), plus.getColor());
     GridUtils.paintZoomOutButton(context, minus.getPosition(), minus.getSize(), minus.getColor());
 
@@ -179,6 +178,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 
     searchBar.paint(context);
     buttonBar.paint(context);
+
+    GridUtils.paintGrid(context, new Point(offsetX, offsetY), gridSize, origo);
   }
 
   public Canvas getCanvas() {
