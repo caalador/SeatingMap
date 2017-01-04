@@ -93,7 +93,11 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
 
   public void checkHover(final double clientX, final double clientY) {
     for (final RoomWidget room : rooms) {
-      room.setShadow(room.pointInObject(clientX, clientY));
+      boolean hover = room.pointInObject(clientX, clientY);
+      room.setShadow(hover);
+      if(hover) {
+        room.checkHover(clientX, clientY);
+      }
     }
   }
 

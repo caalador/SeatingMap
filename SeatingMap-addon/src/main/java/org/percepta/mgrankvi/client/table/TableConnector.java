@@ -1,4 +1,4 @@
-package org.percepta.mgrankvi.client.room;
+package org.percepta.mgrankvi.client.table;
 
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ConnectorHierarchyChangeEvent;
@@ -6,23 +6,24 @@ import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractHasComponentsConnector;
 import com.vaadin.shared.ui.Connect;
 import org.percepta.mgrankvi.Room;
+import org.percepta.mgrankvi.Table;
 
 import java.util.List;
 
 /**
  * Created by Mikael on 18/12/16.
  */
-@Connect(Room.class)
-public class RoomConnector extends AbstractHasComponentsConnector {
+@Connect(Table.class)
+public class TableConnector extends AbstractHasComponentsConnector {
 
     @Override
-    public RoomWidget getWidget() {
-        return (RoomWidget) super.getWidget();
+    public TableWidget getWidget() {
+        return (TableWidget) super.getWidget();
     }
 
     @Override
-    public RoomState getState() {
-        return (RoomState) super.getState();
+    public TableState getState() {
+        return (TableState) super.getState();
     }
 
     @Override
@@ -30,16 +31,17 @@ public class RoomConnector extends AbstractHasComponentsConnector {
         super.onStateChanged(stateChangeEvent);
 
         getWidget().setLines(getState().lines);
+        getWidget().nameString = getState().name;
     }
 
     @Override
     public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent connectorHierarchyChangeEvent) {
         final List<ComponentConnector> children = getChildComponents();
-        final RoomWidget widget = getWidget();
-        widget.clear();
-        for (final ComponentConnector connector : children) {
-            widget.add(connector.getWidget());
-        }
+        final TableWidget widget = getWidget();
+//        widget.clear();
+//        for (final ComponentConnector connector : children) {
+//            widget.add(connector.getWidget());
+//        }
     }
 
     @Override

@@ -60,9 +60,10 @@ public class FloorMap extends AbstractComoponents {
     getState().initial = initialPosition;
   }
 
-  public void addRoom(List<Line> lines) {
+  public Room addRoom(List<Line> lines) {
     Room room = new Room();
     room.addLines(lines);
     addComponent(room);
+    return room;
   }
 }

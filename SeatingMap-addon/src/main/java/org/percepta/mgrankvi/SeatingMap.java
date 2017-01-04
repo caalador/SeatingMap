@@ -24,9 +24,9 @@ public class SeatingMap extends AbstractComoponents {
         });
     }
 
-    public void addRoom(int floor, List<Line> lines) {
+    public Room addRoom(int floor, List<Line> lines) {
         FloorMap map = getFloor(floor);
-        map.addRoom(lines);
+        return map.addRoom(lines);
     }
 
     public void addLines(int floor, List<Line> lines) {
