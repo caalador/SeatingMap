@@ -13,4 +13,6 @@ public class TableState extends AbstractComponentState {
     public List<Line> lines = new LinkedList<Line>();
 
     public String name = "";
+
+    public String imageUrl = null;
 }

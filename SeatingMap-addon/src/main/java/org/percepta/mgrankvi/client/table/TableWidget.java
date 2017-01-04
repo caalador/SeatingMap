@@ -16,6 +16,7 @@ public class TableWidget extends Targetable {
     private static double TWO_PI = Math.PI * 2.0;
 
     protected String nameString;
+    protected String imageUrl;
 
     protected boolean paintName = false;
 
@@ -64,10 +65,11 @@ public class TableWidget extends Targetable {
 
         context.fillText(nameString, drawPosition.getX(), drawPosition.getY() + 12);
 
-//        if (imageUrl != null) {
-//            final Image image = new Image(imageUrl);
-//            context.drawImage(ImageElement.as(image.getElement()), drawPosition.getX(), drawPosition.getY() + 25);
-//        }
+        if (imageUrl != null) {
+            final Image image = new Image(imageUrl);
+
+            context.drawImage(ImageElement.as(image.getElement()), extents.getMinX() + tableWidth / 2 - image.getWidth()/2, drawPosition.getY() + 25);
+        }
 
         context.closePath();
         context.restore();

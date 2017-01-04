@@ -32,6 +32,7 @@ public class TableConnector extends AbstractHasComponentsConnector {
 
         getWidget().setLines(getState().lines);
         getWidget().nameString = getState().name;
+        getWidget().imageUrl = getState().imageUrl;
     }
 
     @Override

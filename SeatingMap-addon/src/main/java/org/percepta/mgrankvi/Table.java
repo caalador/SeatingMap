@@ -25,6 +25,14 @@ public class Table extends AbstractComoponents {
         return getState(false).name;
     }
 
+    public void setImageUrl(String imageUrl) {
+        getState().imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return getState(false).imageUrl;
+    }
+
     public void addLines(List<Line> lines) {
         getState().lines = lines;
     }
