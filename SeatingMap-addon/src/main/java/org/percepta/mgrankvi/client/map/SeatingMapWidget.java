@@ -95,7 +95,10 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 //  GeneratedCodePopup codePopup;
 //  PathGridItem pathGrid;
 
-  public SeatingMapWidget() {
+  private final ActionListener actionListener;
+
+  public SeatingMapWidget(ActionListener actionListener) {
+    this.actionListener = actionListener;
     content = new FlowPanel();
     content.setSize("100%", "100%");
 
@@ -529,44 +532,46 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 //          }
 //          break;
         case FIND:
-          // TODO: Handle all floors.
-          Logger.getLogger("TextHandle").log(Level.FINE, "handling search: " + cmd.getValue());
-          if (selectedFloor != null) {
-            if (selectedFloor.getNames().contains(cmd.getValue())) {
-              selectedFloor.markTableOfSelectedPerson(cmd.getValue());
-            } else if (selectedFloor.namesContain(cmd)) {
-              final LinkedList<String> possible = selectedFloor.possibilities(cmd);
-              if (possible.size() == 1) {
-                selectedFloor.markTableOfSelectedPerson(possible.getFirst());
-              } else if (possible.size() > 1) {
-//                new NameSelectPopup(possible, selectedFloor);
-              }
-            } else {
-              for (final RoomContainer floor : floors) {
-                if (floor.namesContain(cmd)) {
-                  final LinkedList<String> possible = floor.possibilities(cmd);
-                  if (possible.size() == 1) {
-                    final int selectedFloorIndex = floors.indexOf(floor);
-                    setFloor(floors.get(selectedFloorIndex));
-                    floor.markTableOfSelectedPerson(possible.getFirst());
-                    return;
-                  } else if (possible.size() > 1) {
-//                    new NameSelectPopup(possible, floor);
-                    return;
-                  }
-                }
-              }
-              final VNotification notification = new VNotification();
-              final Style style = notification.getElement().getStyle();
-              style.setBackgroundColor("#c8ccd0");
-              style.setPadding(15.0, Style.Unit.PX);
-              style.setProperty("border-radius", "4px");
-              style.setProperty("-moz-border-radius", "4px");
-              style.setProperty("-webkit-border-radius", "4px");
+          actionListener.find(cmd.getValue());
 
-              notification.show("No user found for [" + cmd.getValue() + "]", VNotification.CENTERED, null);
-            }
-          }
+//          // TODO: Handle all floors.
+//          Logger.getLogger("TextHandle").log(Level.FINE, "handling search: " + cmd.getValue());
+//          if (selectedFloor != null) {
+//            if (selectedFloor.getNames().contains(cmd.getValue())) {
+//              selectedFloor.markTableOfSelectedPerson(cmd.getValue());
+//            } else if (selectedFloor.namesContain(cmd)) {
+//              final LinkedList<String> possible = selectedFloor.possibilities(cmd);
+//              if (possible.size() == 1) {
+//                selectedFloor.markTableOfSelectedPerson(possible.getFirst());
+//              } else if (possible.size() > 1) {
+////                new NameSelectPopup(possible, selectedFloor);
+//              }
+//            } else {
+//              for (final RoomContainer floor : floors) {
+//                if (floor.namesContain(cmd)) {
+//                  final LinkedList<String> possible = floor.possibilities(cmd);
+//                  if (possible.size() == 1) {
+//                    final int selectedFloorIndex = floors.indexOf(floor);
+//                    setFloor(floors.get(selectedFloorIndex));
+//                    floor.markTableOfSelectedPerson(possible.getFirst());
+//                    return;
+//                  } else if (possible.size() > 1) {
+////                    new NameSelectPopup(possible, floor);
+//                    return;
+//                  }
+//                }
+//              }
+//              final VNotification notification = new VNotification();
+//              final Style style = notification.getElement().getStyle();
+//              style.setBackgroundColor("#c8ccd0");
+//              style.setPadding(15.0, Style.Unit.PX);
+//              style.setProperty("border-radius", "4px");
+//              style.setProperty("-moz-border-radius", "4px");
+//              style.setProperty("-webkit-border-radius", "4px");
+//
+//              notification.show("No user found for [" + cmd.getValue() + "]", VNotification.CENTERED, null);
+//            }
+//          }
           break;
       }
     }
@@ -625,4 +630,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
     return animating;
   }
 
+  protected interface ActionListener {
+    void find(String searchString);
+  }
 }

@@ -14,51 +14,61 @@ import java.util.List;
  * @author Mikael Grankvist - Vaadin Ltd
  */
 @Connect(SeatingMap.class)
-public class SeatingMapConnector extends AbstractHasComponentsConnector implements SimpleManagedLayout {
+public class SeatingMapConnector extends AbstractHasComponentsConnector implements SimpleManagedLayout, SeatingMapWidget.ActionListener {
 
-  @Override
-  public SeatingMapWidget getWidget() {
-    return (SeatingMapWidget) super.getWidget();
-  }
-
-  @Override
-  public SeatingMapState getState() {
-    return (SeatingMapState) super.getState();
-  }
-
-  @Override
-  public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent connectorHierarchyChangeEvent) {
-    final List<ComponentConnector> children = getChildComponents();
-    final SeatingMapWidget widget = getWidget();
-    widget.clear();
-    for (final ComponentConnector connector : children) {
-      widget.add(connector.getWidget());
+    @Override
+    protected SeatingMapWidget createWidget() {
+        return new SeatingMapWidget(this);
     }
-    for (final ComponentConnector child : connectorHierarchyChangeEvent.getOldChildren()) {
-      child.getWidget().removeFromParent();
+
+    @Override
+    public SeatingMapWidget getWidget() {
+        return (SeatingMapWidget) super.getWidget();
     }
-  }
 
-  @Override
-  public void updateCaption(ComponentConnector componentConnector) {
+    @Override
+    public SeatingMapState getState() {
+        return (SeatingMapState) super.getState();
+    }
 
-  }
-
-  @Override
-  public void layout() {
-    final SeatingMapWidget widget = getWidget();
-    if (!widget.floors.isEmpty()) {
-      if (widget.selectedFloor == null) {
-        widget.setFloor(widget.floors.iterator().next());
-      } else if (widget.selectedFloor != null) {
-        for (final RoomContainer floor : widget.floors) {
-          if (floor.getId().equals(widget.selectedFloor.getId())) {
-            widget.setFloor(floor);
-            break;
-          }
+    @Override
+    public void onConnectorHierarchyChange(ConnectorHierarchyChangeEvent connectorHierarchyChangeEvent) {
+        final List<ComponentConnector> children = getChildComponents();
+        final SeatingMapWidget widget = getWidget();
+        widget.clear();
+        for (final ComponentConnector connector : children) {
+            widget.add(connector.getWidget());
         }
-      }
+        for (final ComponentConnector child : connectorHierarchyChangeEvent.getOldChildren()) {
+            child.getWidget().removeFromParent();
+        }
     }
-    widget.repaint();
-  }
+
+    @Override
+    public void updateCaption(ComponentConnector componentConnector) {
+
+    }
+
+    @Override
+    public void layout() {
+        final SeatingMapWidget widget = getWidget();
+        if (!widget.floors.isEmpty()) {
+            if (widget.selectedFloor == null) {
+                widget.setFloor(widget.floors.iterator().next());
+            } else if (widget.selectedFloor != null) {
+                for (final RoomContainer floor : widget.floors) {
+                    if (floor.getId().equals(widget.selectedFloor.getId())) {
+                        widget.setFloor(floor);
+                        break;
+                    }
+                }
+            }
+        }
+        widget.repaint();
+    }
+
+    @Override
+    public void find(String searchString) {
+        getRpcProxy(SeatingMapServerRpc.class).findByName(searchString);
+    }
 }

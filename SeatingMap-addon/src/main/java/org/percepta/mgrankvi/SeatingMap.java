@@ -2,6 +2,7 @@ package org.percepta.mgrankvi;
 
 import com.google.common.collect.Maps;
 import org.percepta.mgrankvi.client.geometry.Line;
+import org.percepta.mgrankvi.client.map.SeatingMapServerRpc;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,15 @@ public class SeatingMap extends AbstractComoponents {
 
 
     Map<Integer, FloorMap> floors = Maps.newHashMap();
+
+    public SeatingMap() {
+        registerRpc(new SeatingMapServerRpc() {
+            @Override
+            public void findByName(String name) {
+
+            }
+        });
+    }
 
     public void addRoom(int floor, List<Line> lines) {
         FloorMap map = getFloor(floor);
