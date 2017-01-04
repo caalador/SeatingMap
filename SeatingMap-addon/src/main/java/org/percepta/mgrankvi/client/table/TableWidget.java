@@ -68,7 +68,7 @@ public class TableWidget extends Targetable {
         if (imageUrl != null) {
             final Image image = new Image(imageUrl);
 
-            context.drawImage(ImageElement.as(image.getElement()), extents.getMinX() + tableWidth / 2 - image.getWidth()/2, drawPosition.getY() + 25);
+            context.drawImage(ImageElement.as(image.getElement()), position.getX() + extents.getMinX() + tableWidth / 2 - image.getWidth()/2, drawPosition.getY() + 25);
         }
 
         context.closePath();
