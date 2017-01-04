@@ -15,11 +15,26 @@ public class SeatingMap extends AbstractComoponents {
 
     Map<Integer, FloorMap> floors = Maps.newHashMap();
 
+    Integer visibleFloor;
+
     public SeatingMap() {
         registerRpc(new SeatingMapServerRpc() {
             @Override
             public void findByName(String name) {
+                for(FloorMap floor:floors.values()) {
+                    for(Room room : floor.getRooms()) {
+                        for(Table table: room.getTables()) {
+                            if(table.getName().toLowerCase().contains(name.toLowerCase())) {
+                                System.out.println(table);
+                            }
+                        }
+                    }
+                }
+            }
 
+            @Override
+            public void setVisibleFloor(int floor) {
+                visibleFloor = floor;
             }
         });
     }
@@ -43,6 +58,9 @@ public class SeatingMap extends AbstractComoponents {
             map = new FloorMap(floor);
             floors.put(floor, map);
             addComponent(map);
+            if(visibleFloor == null) {
+                visibleFloor = floor;
+            }
         }
         return map;
     }

@@ -8,4 +8,6 @@ import com.vaadin.shared.communication.ServerRpc;
 public interface SeatingMapServerRpc extends ServerRpc {
 
     void findByName(String name);
+
+    void setVisibleFloor(int floor);
 }

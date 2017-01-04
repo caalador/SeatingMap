@@ -151,6 +151,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
     floor.setGrid(this);
     hasFloorAbove = hasFloorAbove();
     hasFloorBelow = hasFloorBelow();
+
+    actionListener.setSelectedFloor(floor.getLevel());
   }
 
   private void paint() {
@@ -633,5 +635,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 
   protected interface ActionListener {
     void find(String searchString);
+    void setSelectedFloor(int floor);
   }
 }

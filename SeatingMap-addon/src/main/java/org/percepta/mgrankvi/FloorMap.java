@@ -1,9 +1,11 @@
 package org.percepta.mgrankvi;
 
+import com.vaadin.ui.Component;
 import org.percepta.mgrankvi.client.floor.FloorMapState;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ import java.util.UUID;
  */
 public class FloorMap extends AbstractComoponents {
 
+  List<Room> rooms = new LinkedList<>();
 
   public FloorMap() {
     getState().id = UUID.randomUUID().toString();
@@ -65,5 +68,30 @@ public class FloorMap extends AbstractComoponents {
     room.addLines(lines);
     addComponent(room);
     return room;
+  }
+
+  @Override
+  public void addComponent(Component c) {
+    super.addComponent(c);
+    if(c instanceof Room && !rooms.contains((Room)c)) {
+      rooms.add((Room)c);
+    }
+  }
+
+
+  @Override
+  public void removeComponent(Component c) {
+    super.removeComponent(c);
+    rooms.remove(c);
+  }
+
+  @Override
+  public void removeAllComponents() {
+    super.removeAllComponents();
+    rooms.clear();
+  }
+
+  public List<Room> getRooms() {
+    return rooms;
   }
 }

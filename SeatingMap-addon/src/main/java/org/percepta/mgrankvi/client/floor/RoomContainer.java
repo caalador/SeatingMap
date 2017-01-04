@@ -178,4 +178,7 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
     rooms.remove(room);
   }
 
+  public int getLevel() {
+    return level;
+  }
 }

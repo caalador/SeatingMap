@@ -71,4 +71,9 @@ public class SeatingMapConnector extends AbstractHasComponentsConnector implemen
     public void find(String searchString) {
         getRpcProxy(SeatingMapServerRpc.class).findByName(searchString);
     }
+
+    @Override
+    public void setSelectedFloor(int floor) {
+        getRpcProxy(SeatingMapServerRpc.class).setVisibleFloor(floor);
+    }
 }
