@@ -9,7 +9,9 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.percepta.mgrankvi.FloorMap;
+import org.percepta.mgrankvi.Room;
 import org.percepta.mgrankvi.SeatingMap;
+import org.percepta.mgrankvi.Table;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 import org.percepta.mgrankvi.util.ImageToLines;
@@ -34,11 +36,19 @@ public class DemoUI extends UI {
     final SeatingMap component = new SeatingMap();
     component.setSizeFull();
 
-    List<Line> thirdLines = new ImageToLines().getLines("/org/percepta/mgrankvi/demo/ThirdFloorMarketing.png",new Point(150,150));
+    ImageToLines imageToLines = new ImageToLines();
+    List<Line> thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorMarketing.png",new Point(150,150));
     component.addRoom(1, thirdLines);
-    thirdLines = new ImageToLines().getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png",new Point(150,150));
-    component.addRoom(1, thirdLines);
-    thirdLines = new ImageToLines().getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png",new Point(150,150));
+    thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png",new Point(150,150));
+    Room room = component.addRoom(1, thirdLines);
+    Table table = new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t1.png", new Point(150, 150)));
+    table.setName("Terhi Testi");
+    room.addComponent(table);
+    room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t2.png",new Point(150,150))));
+    room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t3.png",new Point(150,150))));
+    room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t4.png",new Point(150,150))));
+
+    thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png",new Point(150,150));
     component.addLines(1, thirdLines);
 
     // Show it in the middle of the screen
