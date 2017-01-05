@@ -1,21 +1,15 @@
 package org.percepta.mgrankvi.client.floor;
 
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.Widget;
 import org.percepta.mgrankvi.client.abstracts.Item;
-import org.percepta.mgrankvi.client.geometry.Line;
-import org.percepta.mgrankvi.client.geometry.Point;
-import org.percepta.mgrankvi.client.map.CommandObject;
 import org.percepta.mgrankvi.client.map.SeatingMapWidget;
 import org.percepta.mgrankvi.client.room.RoomWidget;
+import org.percepta.mgrankvi.client.helpers.Clicked;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,10 +75,16 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
 //    }
   }
 
-  public void clickForRoomSelect(final double downX, final double downY) {
-//    for (final CRoom room : rooms) {
-//      room.clicked(downX, downY);
-//    }
+  public Clicked clickAction(final double downX, final double downY) {
+    Clicked  click = new Clicked();
+    for (final RoomWidget room : rooms) {
+      if(room.pointInObject(downX, downY)) {
+        click.clickedTable = room.click(downX, downY).clickedTable;
+        click.clickedRoom = room;
+        break;
+      }
+    }
+    return click;
   }
 
   public void mouseUp() {

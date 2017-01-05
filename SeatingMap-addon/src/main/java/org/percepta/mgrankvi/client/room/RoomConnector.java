@@ -30,6 +30,7 @@ public class RoomConnector extends AbstractHasComponentsConnector {
         super.onStateChanged(stateChangeEvent);
 
         getWidget().setLines(getState().lines);
+        getWidget().id = getState().id;
     }
 
     @Override

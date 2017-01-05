@@ -2,10 +2,10 @@ package org.percepta.mgrankvi.client.table;
 
 import com.vaadin.client.ComponentConnector;
 import com.vaadin.client.ConnectorHierarchyChangeEvent;
+import com.vaadin.client.annotations.OnStateChange;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractHasComponentsConnector;
 import com.vaadin.shared.ui.Connect;
-import org.percepta.mgrankvi.Room;
 import org.percepta.mgrankvi.Table;
 
 import java.util.List;
@@ -33,6 +33,12 @@ public class TableConnector extends AbstractHasComponentsConnector {
         getWidget().setLines(getState().lines);
         getWidget().nameString = getState().name;
         getWidget().imageUrl = getState().imageUrl;
+        getWidget().id = getState().id;
+    }
+
+    @OnStateChange("nameVisibility")
+    void switchNameVisibility() {
+        getWidget().setNameVisible(getState().nameVisibility);
     }
 
     @Override

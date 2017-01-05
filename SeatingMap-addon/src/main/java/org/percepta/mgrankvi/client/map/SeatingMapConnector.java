@@ -7,6 +7,7 @@ import com.vaadin.client.ui.SimpleManagedLayout;
 import com.vaadin.shared.ui.Connect;
 import org.percepta.mgrankvi.SeatingMap;
 import org.percepta.mgrankvi.client.floor.RoomContainer;
+import org.percepta.mgrankvi.client.helpers.Clicked;
 
 import java.util.List;
 
@@ -75,5 +76,12 @@ public class SeatingMapConnector extends AbstractHasComponentsConnector implemen
     @Override
     public void setSelectedFloor(int floor) {
         getRpcProxy(SeatingMapServerRpc.class).setVisibleFloor(floor);
+    }
+
+    @Override
+    public void clicked(Clicked clicked) {
+        if(clicked.targetableClicked()) {
+            getRpcProxy(SeatingMapServerRpc.class).itemClick(clicked.getRoomId(), clicked.getTableId());
+        }
     }
 }

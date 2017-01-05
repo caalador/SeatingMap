@@ -3,11 +3,14 @@ package org.percepta.mgrankvi.client.abstracts;
 import org.percepta.mgrankvi.client.geometry.Calculations;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
+import org.percepta.mgrankvi.client.helpers.Clicked;
 
 /**
  * Created by Mikael on 04/01/17.
  */
 public abstract class Targetable extends Item {
+
+    public String id;
 
     public boolean pointInObject(final double x, final double y) {
         if (x < (position.getX() + extents.getMinX()) || x > (position.getX() + extents.getMaxX()) || y < (position.getY() + extents.getMinY()) || y > (position.getY() + extents.getMaxY())) {
@@ -28,4 +31,6 @@ public abstract class Targetable extends Item {
         }
         return intercepts % 2 == 1;
     }
+
+    public abstract Clicked click(double downX, double downY);
 }

@@ -5,6 +5,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.Widget;
 import org.percepta.mgrankvi.client.abstracts.Targetable;
 import org.percepta.mgrankvi.client.table.TableWidget;
+import org.percepta.mgrankvi.client.helpers.Clicked;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -73,5 +74,18 @@ public class RoomWidget extends Targetable {
                 break;
             }
         }
+    }
+
+    @Override
+    public Clicked click(double clientX, double clientY) {
+        Clicked  click = new Clicked();
+        for (final TableWidget table : tables) {
+            if (table.pointInObject(clientX, clientY)) {
+                table.click(clientX, clientY);
+                click.clickedTable = table;
+                break;
+            }
+        }
+        return click;
     }
 }

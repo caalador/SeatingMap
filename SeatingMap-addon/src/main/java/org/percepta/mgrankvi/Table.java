@@ -4,6 +4,7 @@ import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.table.TableState;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Mikael on 04/01/17.
@@ -11,9 +12,11 @@ import java.util.List;
 public class Table extends AbstractComoponents {
 
     public Table() {
+        setId(UUID.randomUUID().toString());
     }
 
     public Table(List<Line> lines) {
+        this();
         addLines(lines);
     }
 
@@ -35,6 +38,18 @@ public class Table extends AbstractComoponents {
 
     public void addLines(List<Line> lines) {
         getState().lines = lines;
+    }
+
+    public void setId(String id) {
+        getState().id = id;
+    }
+
+    public void setNameVisibility(boolean nameVisibility) {
+        getState().nameVisibility = nameVisibility;
+    }
+
+    public boolean getNameVisibility() {
+        return getState(false).nameVisibility;
     }
 
     @Override

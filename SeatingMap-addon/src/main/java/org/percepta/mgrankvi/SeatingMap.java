@@ -36,6 +36,19 @@ public class SeatingMap extends AbstractComoponents {
             public void setVisibleFloor(int floor) {
                 visibleFloor = floor;
             }
+
+            @Override
+            public void itemClick(String roomId, String tableId) {
+                System.out.println("Got item selection!");
+                Room clickedRoom = floors.get(visibleFloor).getRoomById(roomId);
+                Table clickedTable = clickedRoom.getTableById(tableId);
+
+                if(clickedTable != null) {
+                    clickedTable.setNameVisibility(!clickedTable.getNameVisibility());
+                }
+
+                System.out.println(clickedRoom + " :: " + clickedTable);
+            }
         });
     }
 

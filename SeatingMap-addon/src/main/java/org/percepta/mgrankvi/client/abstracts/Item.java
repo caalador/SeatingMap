@@ -5,6 +5,7 @@ import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.user.client.ui.Widget;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
+import org.percepta.mgrankvi.client.helpers.Extents;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

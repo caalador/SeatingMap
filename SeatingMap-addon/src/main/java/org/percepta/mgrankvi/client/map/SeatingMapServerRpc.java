@@ -10,4 +10,6 @@ public interface SeatingMapServerRpc extends ServerRpc {
     void findByName(String name);
 
     void setVisibleFloor(int floor);
+
+    void itemClick(String roomId, String tableId);
 }

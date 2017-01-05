@@ -1,4 +1,4 @@
-package org.percepta.mgrankvi.client.abstracts;
+package org.percepta.mgrankvi.client.helpers;
 
 import org.percepta.mgrankvi.client.geometry.Line;
 

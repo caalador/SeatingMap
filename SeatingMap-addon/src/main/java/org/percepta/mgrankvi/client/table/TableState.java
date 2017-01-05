@@ -15,4 +15,6 @@ public class TableState extends AbstractComponentState {
     public String name = "";
 
     public String imageUrl = null;
+
+    public boolean nameVisibility = false;
 }

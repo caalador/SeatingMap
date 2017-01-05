@@ -31,6 +31,7 @@ public class FloorMapConnector extends AbstractHasComponentsConnector {
 
     getWidget().setLines(getState().lines);
     getWidget().setPosition(getState().initial);
+    getWidget().level = getState().level;
   }
 
   @Override

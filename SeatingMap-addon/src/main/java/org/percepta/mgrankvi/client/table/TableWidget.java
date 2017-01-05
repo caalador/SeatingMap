@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Image;
 import org.percepta.mgrankvi.client.abstracts.Targetable;
 import org.percepta.mgrankvi.client.geometry.Calculations;
 import org.percepta.mgrankvi.client.geometry.Point;
+import org.percepta.mgrankvi.client.helpers.Clicked;
 
 /**
  * Created by Mikael on 18/12/16.
@@ -19,6 +20,7 @@ public class TableWidget extends Targetable {
     protected String imageUrl;
 
     protected boolean paintName = false;
+    protected boolean nameVisibility = false;
 
     public TableWidget() {  // Dummy
         setElement(Document.get().createDivElement());
@@ -33,7 +35,7 @@ public class TableWidget extends Targetable {
     public void paint(Context2d context) {
         super.paint(context);
 
-        if (paintName) {
+        if (paintName || nameVisibility) {
             paintName(context);
         }
     }
@@ -73,5 +75,15 @@ public class TableWidget extends Targetable {
 
         context.closePath();
         context.restore();
+    }
+
+    public void setNameVisible(boolean nameVisibility) {
+        this.nameVisibility = nameVisibility;
+    }
+
+    @Override
+    public Clicked click(double downX, double downY) {
+//        nameVisibility = !nameVisibility;
+        return null;
     }
 }
