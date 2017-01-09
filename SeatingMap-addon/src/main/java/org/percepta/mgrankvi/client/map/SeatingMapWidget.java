@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.percepta.mgrankvi.client.floor.RoomContainer;
 import org.percepta.mgrankvi.client.geometry.Point;
-import org.percepta.mgrankvi.client.utils.GridUtils;
 import org.percepta.mgrankvi.client.helpers.Clicked;
+import org.percepta.mgrankvi.client.utils.GridUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,6 +62,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 
     final GridButton up, down, plus, minus;
 
+    private boolean internalSearchBarEnabled = false;
     SearchBar searchBar = new SearchBar(this);
     ButtonBar buttonBar = new ButtonBar(this);
 
@@ -112,7 +113,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         if (canvas != null) {
             content.add(canvas);
             clearCanvas();
-            // paint();
         } else {
             getElement().setInnerHTML("Canvas not supported");
         }
@@ -171,8 +171,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 //    for (final VisualItem item : items) {
 //      item.paint(context);
 //    }
-
-        searchBar.paint(context);
+        if (internalSearchBarEnabled)
+            searchBar.paint(context);
         buttonBar.paint(context);
 
         GridUtils.paintGrid(context, new Point(offsetX, offsetY), gridSize, origo);
@@ -325,9 +325,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
             contextMenu.hide();
             contextMenu = null;
         }
-//    if (isEditable && selectedFloor != null) {
-//      selectedFloor.mouseDownEditable(downX, downY);
-//    }
     }
 
     @Override
@@ -348,13 +345,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         if (mouseDown) {
             mouseMoved = true;
 
-//      if (selectedFloor != null) {
-//        if (selectedFloor.selected == null) {
             pan(event);
-//        } else {
-//          selectedFloor.moveRoom(selectedFloor.selected, event, clientX, clientY);
-//        }
-//      }
 
             downX = clientX;
             downY = clientY;
@@ -384,14 +375,16 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         } else {
             clearColors();
         }
-        if (searchBar.mouseOver(clientX, clientY)) {
-            if (!searchBar.isVisible()) {
+        if (internalSearchBarEnabled) {
+            if (searchBar.mouseOver(clientX, clientY)) {
+                if (!searchBar.isVisible()) {
+                    searchBar.setAnimate(true);
+                    searchBar.setVisible(true);
+                }
+            } else if (searchBar.isVisible()) {
                 searchBar.setAnimate(true);
-                searchBar.setVisible(true);
+                searchBar.setVisible(false);
             }
-        } else if (searchBar.isVisible()) {
-            searchBar.setAnimate(true);
-            searchBar.setVisible(false);
         }
         repaint();
     }
@@ -420,9 +413,6 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         if (orgOrigo != null) {
             orgOrigo.move(amountx, amounty);
         }
-        // if (selectedFloor != null) {
-        // selectedFloor.panRooms(amountx, amounty);
-        // }
         for (final RoomContainer floor : floors) {
             floor.pan(amountx, amounty);
         }
