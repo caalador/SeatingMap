@@ -181,4 +181,8 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
   public int getLevel() {
     return level;
   }
+
+  public List<RoomWidget> getRooms() {
+    return rooms;
+  }
 }

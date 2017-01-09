@@ -73,9 +73,17 @@ public abstract class Item extends Widget {
         this.position = position;
     }
 
+    public Point getPosition() {
+        return position.clonePoint();
+    }
+
     public void movePosition(final int x, final int y) {
         position.move(x, y);
         orgPosition.move(x, y);
+    }
+
+    public Extents getExtents() {
+        return extents;
     }
 
     public void scale(final double scale) {

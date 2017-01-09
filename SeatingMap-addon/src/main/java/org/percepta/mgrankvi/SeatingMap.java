@@ -2,6 +2,7 @@ package org.percepta.mgrankvi;
 
 import com.google.common.collect.Maps;
 import org.percepta.mgrankvi.client.geometry.Line;
+import org.percepta.mgrankvi.client.map.SeatingMapClientRpc;
 import org.percepta.mgrankvi.client.map.SeatingMapServerRpc;
 
 import java.util.LinkedList;
@@ -25,6 +26,9 @@ public class SeatingMap extends AbstractComoponents {
             public void findByName(String name) {
                 SearchResult singleByName = getSingleByName(name);
 //                singleByName.table.
+                if(singleByName != null) {
+                    moveTableToView(singleByName.getTable());
+                }
             }
 
             @Override
@@ -130,5 +134,9 @@ public class SeatingMap extends AbstractComoponents {
         }
 
         return result;
+    }
+
+    public void moveTableToView(Table table) {
+        getRpcProxy(SeatingMapClientRpc.class).moveTableToView(table.getId());
     }
 }

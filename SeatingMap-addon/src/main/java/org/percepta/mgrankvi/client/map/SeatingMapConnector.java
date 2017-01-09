@@ -17,6 +17,15 @@ import java.util.List;
 @Connect(SeatingMap.class)
 public class SeatingMapConnector extends AbstractHasComponentsConnector implements SimpleManagedLayout, SeatingMapWidget.ActionListener {
 
+    public SeatingMapConnector() {
+        registerRpc(SeatingMapClientRpc.class, new SeatingMapClientRpc() {
+            @Override
+            public void moveTableToView(String tableId) {
+                getWidget().moveTableToView(tableId);
+            }
+        });
+    }
+
     @Override
     protected SeatingMapWidget createWidget() {
         return new SeatingMapWidget(this);

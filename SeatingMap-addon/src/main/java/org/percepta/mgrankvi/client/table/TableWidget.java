@@ -49,7 +49,7 @@ public class TableWidget extends Targetable {
 
         final double namePosition = (tableWidth - width) / 2;
 
-        final Point drawPosition = Calculations.combine(Calculations.combine(position, new Point(extents.getMinX(),extents.getMinY())),
+        final Point drawPosition = Calculations.combine(Calculations.combine(position, new Point(extents.getMinX(), extents.getMinY())),
                 new Point((int) Math.floor(namePosition), (int) Math.floor((extents.getMaxY() - extents.getMinY()) * 0.5 - 10)));
 
         context.setFillStyle("GREEN");
@@ -70,11 +70,21 @@ public class TableWidget extends Targetable {
         if (imageUrl != null) {
             final Image image = new Image(imageUrl);
 
-            context.drawImage(ImageElement.as(image.getElement()), position.getX() + extents.getMinX() + tableWidth / 2 - image.getWidth()/2, drawPosition.getY() + 25);
+            context.drawImage(ImageElement.as(image.getElement()), position.getX() + extents.getMinX() + tableWidth / 2 - image.getWidth() / 2, drawPosition.getY() + 25);
         }
 
         context.closePath();
         context.restore();
+    }
+
+    public double getXPositionOnCanvas() {
+        final Point drawPosition = Calculations.combine(position, new Point(extents.getMinX(), extents.getMinY()));
+        return drawPosition.getX();
+    }
+
+    public double getYPositionOnCanvas() {
+        final Point drawPosition = Calculations.combine(position, new Point(extents.getMinX(), extents.getMinY()));
+        return drawPosition.getY();
     }
 
     public void setNameVisible(boolean nameVisibility) {

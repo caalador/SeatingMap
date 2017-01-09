@@ -1,5 +1,6 @@
 package org.percepta.mgrankvi.client.map;
 
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.NativeEvent;
@@ -26,12 +27,17 @@ import com.google.gwt.user.client.ui.Widget;
 import org.percepta.mgrankvi.client.floor.RoomContainer;
 import org.percepta.mgrankvi.client.geometry.Point;
 import org.percepta.mgrankvi.client.helpers.Clicked;
+import org.percepta.mgrankvi.client.helpers.Extents;
+import org.percepta.mgrankvi.client.room.RoomWidget;
+import org.percepta.mgrankvi.client.table.TableWidget;
 import org.percepta.mgrankvi.client.utils.GridUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Mikael Grankvist - Vaadin Ltd
@@ -623,5 +629,58 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         void setSelectedFloor(int floor);
 
         void clicked(Clicked clicked);
+    }
+
+    protected void moveTableToView(String tableId) {
+        for (RoomContainer floor : floors) {
+            for (RoomWidget room : floor.getRooms()) {
+                for (TableWidget table : room.getTables()) {
+                    if (table.id.equals(tableId)) {
+                        if(!selectedFloor.equals(floor)){
+                            setFloor(floor);
+                        }
+                        moveTableToView(table);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    protected void moveTableToView(final TableWidget table) {
+        Extents extents = table.getExtents();
+        final double xPointInCanvas = (canvas.getCoordinateSpaceWidth() / 2) - (extents.getMaxX() - extents.getMinX()) / 2;
+        final double yPointInCanvas = (canvas.getCoordinateSpaceHeight() / 2) - (extents.getMaxY() - extents.getMinY()) / 2;
+
+//    table.getPosition();
+        final double tableCornerX = table.getXPositionOnCanvas();//table.getPositionX() + room.getPositionX();
+        final double tableCornerY = table.getYPositionOnCanvas();//table.getPositionY() + room.getPositionY();
+
+        final double panX = xPointInCanvas - tableCornerX;
+        final double panY = yPointInCanvas - tableCornerY;
+
+        final Animation animate = new Animation() {
+            double movedX = 0;
+            double movedY = 0;
+
+            @Override
+            protected void onUpdate(final double progress) {
+                final double moveX = panX * progress - movedX;
+                final double moveY = panY * progress - movedY;
+                movedX += moveX;
+                movedY += moveY;
+                pan((int) Math.floor(moveX), (int) Math.floor(moveY));
+                repaint();
+            }
+
+            @Override
+            protected void onComplete() {
+                super.onComplete();
+                setAnimating(false);
+            }
+        };
+        setAnimating(true);
+        Logger.getLogger("CFloor").log(Level.FINER, " -- X: " + panX + " Y: " + panY);
+        animate.run(Math.abs(panX) > Math.abs(panY) ? (int) (Math.abs(panX)) : (int) (Math.abs(panY)));
     }
 }

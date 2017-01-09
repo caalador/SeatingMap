@@ -88,4 +88,8 @@ public class RoomWidget extends Targetable {
         }
         return click;
     }
+
+    public List<TableWidget> getTables() {
+        return tables;
+    }
 }
