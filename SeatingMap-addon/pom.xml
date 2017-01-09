@@ -6,7 +6,7 @@
 	<artifactId>SeatingMap</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1-SNAPSHOT</version>
-	<name>MyComponent Add-on</name>
+	<name>Seating map add-on for showing where people are seated at the office</name>
 
 	<prerequisites>
 		<maven>3</maven>
@@ -16,8 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<vaadin.version>7.7.5</vaadin.version>
-		<vaadin.plugin.version>7.7.5</vaadin.plugin.version>
+		<vaadin.version>7.7.6</vaadin.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
 		<!-- ZIP Manifest fields -->
 		<Implementation-Version>${project.version}</Implementation-Version>
