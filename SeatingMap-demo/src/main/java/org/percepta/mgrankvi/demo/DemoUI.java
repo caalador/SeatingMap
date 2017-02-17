@@ -37,9 +37,11 @@ public class DemoUI extends UI {
 
         ImageToLines imageToLines = new ImageToLines();
         List<Line> thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorMarketing.png", new Point(150, 150));
-        component.addRoom(1, thirdLines);
-        thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png", new Point(150, 150));
         Room room = component.addRoom(1, thirdLines);
+        room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t5.png", new Point(150, 150))));
+
+        thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png", new Point(150, 150));
+        room = component.addRoom(1, thirdLines);
         Table table = new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t1.png", new Point(150, 150)));
         table.setName("Terhi Testi");
         table.setImageUrl("https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
@@ -50,6 +52,8 @@ public class DemoUI extends UI {
 
         thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png", new Point(150, 150));
         component.addLines(1, thirdLines);
+
+        List<Line> pathLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorPaths.png", new Point(150, 150));
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
