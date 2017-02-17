@@ -11,6 +11,8 @@ import java.util.UUID;
  */
 public class Table extends AbstractComoponents {
 
+    private int closestNodeId;
+
     public Table() {
         setId(UUID.randomUUID().toString());
     }
@@ -50,6 +52,14 @@ public class Table extends AbstractComoponents {
 
     public boolean getNameVisibility() {
         return getState(false).nameVisibility;
+    }
+
+    public void setClosestNodeId(int nodeId){
+        closestNodeId = nodeId;
+    }
+
+    public int getNodeId(){
+        return  closestNodeId;
     }
 
     @Override

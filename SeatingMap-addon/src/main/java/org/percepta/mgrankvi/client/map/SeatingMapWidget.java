@@ -68,7 +68,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
 
     final GridButton up, down, plus, minus;
 
-    private boolean internalSearchBarEnabled = false;
+    private boolean internalSearchBarEnabled = true;
     SearchBar searchBar = new SearchBar(this);
     ButtonBar buttonBar = new ButtonBar(this);
 
@@ -652,9 +652,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         final double xPointInCanvas = (canvas.getCoordinateSpaceWidth() / 2) - (extents.getMaxX() - extents.getMinX()) / 2;
         final double yPointInCanvas = (canvas.getCoordinateSpaceHeight() / 2) - (extents.getMaxY() - extents.getMinY()) / 2;
 
-//    table.getPosition();
-        final double tableCornerX = table.getXPositionOnCanvas();//table.getPositionX() + room.getPositionX();
-        final double tableCornerY = table.getYPositionOnCanvas();//table.getPositionY() + room.getPositionY();
+        final double tableCornerX = table.getXPositionOnCanvas();
+        final double tableCornerY = table.getYPositionOnCanvas();
 
         final double panX = xPointInCanvas - tableCornerX;
         final double panY = yPointInCanvas - tableCornerY;
