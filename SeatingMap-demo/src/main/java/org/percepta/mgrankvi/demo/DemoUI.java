@@ -55,8 +55,11 @@ public class DemoUI extends UI {
 
         List<Line> pathLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorPaths.png", new Point(150, 150));
 
+        component.addPaths(pathLines, 1);
+
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
         layout.setStyleName("demoContentLayout");
         layout.setSizeFull();
         layout.addComponent(component);

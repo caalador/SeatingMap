@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -216,8 +217,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
                 mouseMoved = false;
                 return;
             }
-            final int clientX = event.getClientX();
-            final int clientY = event.getClientY();
+            final int clientX = getEventX(event);
+            final int clientY = getEventY(event);
             if (clientX > Window.getClientWidth() - 50 && clientX < Window.getClientWidth() - 25) {
                 if (clientY > plus.getPosition().getY() && clientY < plus.getPosition().getY() + BUTTON_SIZE) {
                     // sx = sy = 2
@@ -284,6 +285,15 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         }
     }
 
+    private int getEventY(MouseEvent event) {
+
+        return event.getClientY() - this.getAbsoluteTop();
+    }
+
+    private int getEventX(MouseEvent event) {
+        return event.getClientX() - this.getAbsoluteLeft();
+    }
+
     private void scale(final double scale) {
         if (orgOrigo == null) {
             orgOrigo = new Point(origo.getX(), origo.getY());
@@ -324,8 +334,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         if (animating) {
             return;
         }
-        downX = event.getClientX();
-        downY = event.getClientY();
+        downX = getEventX(event);
+        downY = getEventY(event);
         mouseDown = true;
         if (contextMenu != null) {
             contextMenu.hide();
@@ -346,8 +356,8 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
         if (animating) {
             return;
         }
-        final int clientX = event.getClientX();
-        final int clientY = event.getClientY();
+        final int clientX = getEventX(event);
+        final int clientY = getEventY(event);
         if (mouseDown) {
             mouseMoved = true;
 
@@ -405,7 +415,7 @@ public class SeatingMapWidget extends Composite implements ClickHandler, MouseDo
     }
 
     public void pan(final MouseMoveEvent event) {
-        pan(event.getClientX() - downX, event.getClientY() - downY);
+        pan(getEventX(event) - downX, getEventY(event) - downY);
     }
 
     public void pan(final int amountx, final int amounty) {

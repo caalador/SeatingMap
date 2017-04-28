@@ -1,7 +1,6 @@
 package org.percepta.mgrankvi.client.map.buttons;
 
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.vaadin.client.VConsole;
 
 public abstract class AbstractButton {
 
@@ -63,10 +62,8 @@ public abstract class AbstractButton {
     }
 
     protected boolean inside(final int pointX, final int pointY) {
-        VConsole.log(" -- X: " + pointX + " Y: " + pointY);
-        VConsole.log(" -- X min/max: " + (x - offsetX) + " / " + (x - offsetX + 20));
-        VConsole.log(" -- Y min/max: " + (y - offsetY) + " / " + (y - offsetY + 20));
-        if (pointX > x - offsetX && pointX < x - offsetX + 20 && pointY > y - offsetY && pointY < y - offsetY + 20) {
+        if (pointX > x - offsetX && pointX < x - offsetX + 20
+                && pointY > y - offsetY && pointY < y - offsetY + 20) {
             return true;
         }
         return false;

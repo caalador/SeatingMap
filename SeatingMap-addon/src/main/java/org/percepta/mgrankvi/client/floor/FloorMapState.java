@@ -1,6 +1,8 @@
 package org.percepta.mgrankvi.client.floor;
 
 import com.vaadin.shared.AbstractComponentState;
+import com.vaadin.shared.ui.AbstractComponentContainerState;
+
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * @author Mikael Grankvist - Vaadin Ltd
  */
-public class FloorMapState extends AbstractComponentState {
+public class FloorMapState extends AbstractComponentContainerState {
 
   public int level = 0;
 
