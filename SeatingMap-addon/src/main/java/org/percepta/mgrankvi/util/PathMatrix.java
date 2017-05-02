@@ -28,7 +28,8 @@ public class PathMatrix {
         matrix = new Vector<>(maxY);
         IntStream.range(0, maxY).forEach(i -> {
             matrix.add(new Vector<>(maxX));
-            IntStream.range(0,maxX).forEach(j -> matrix.get(i).add(new HashSet()));
+            IntStream.range(0, maxX)
+                    .forEach(j -> matrix.get(i).add(new HashSet()));
         });
         nodes.forEach(node -> {
             int y = getMaxByHundred(node.getPosition().getY());
@@ -68,25 +69,32 @@ public class PathMatrix {
         // The cutoff is not efficient if running close to the sides
         // but the expectation is that a point would be found really
         // close to the search point.
+        //
         Node nearest = null;
+        boolean segmentDone = false;
         do {
-            if (y > maxY) {
-                y = maxY;
-            }
-            if (x > maxX) {
-                x = maxX;
-            }
-            if (y < 0) {
-                y = 0;
-            }
-            if (x < 0) {
-                x = 0;
+            // Only check nearest if we reside inside matrix, else just advance.
+            if (y < maxY || x < maxX || y >= 0 || x >= 0) {
+                Node newNearest = getNearest(x, y, nearest);
+                if (nearest != null) {
+                    double distance = Math.hypot(
+                            x - nearest.getPosition().getX(),
+                            y - nearest.getPosition().getY());
+                    double newDistance = Math.hypot(
+                            x - newNearest.getPosition().getX(),
+                            y - newNearest.getPosition().getY());
+                    if (distance > newDistance) {
+                        nearest = newNearest;
+                    }
+                } else {
+                    nearest = newNearest;
+                }
             }
 
-            nearest = getNearest(x, y);
             x += dx;
             y += dy;
             segment_passed++;
+            segmentDone = false;
             if (segment_length == segment_passed) {
                 segment_passed = 0;
                 int holder = dx;
@@ -94,15 +102,18 @@ public class PathMatrix {
                 dy = holder;
                 if (dy == 0) {
                     segment_length++;
+                    segmentDone = true;
                 }
             }
             tries++;
-        } while (nearest == null || cutoff <= tries);
+            // Run whole segment for the off chance that we have a
+            // closer match than the first found.
+        } while ((nearest == null && !segmentDone) || cutoff <= tries);
 
         return nearest;
     }
 
-    private Node getNearest(int x, int y) {
+    private Node getNearest(int x, int y, Node currentNearest) {
         Node nearest = null;
         double dist = Double.MAX_VALUE;
 
@@ -114,7 +125,17 @@ public class PathMatrix {
                 dist = distance;
             }
         }
-
+        // Check if the old nearest if closer than the one found in this cell.
+        if (currentNearest != null) {
+            double currentDistance = Math.hypot(
+                    x - currentNearest.getPosition().getX(),
+                    y - currentNearest.getPosition().getY());
+            double newDistance = Math.hypot(x - nearest.getPosition().getX(),
+                    y - nearest.getPosition().getY());
+            if (currentDistance < newDistance) {
+                nearest = currentNearest;
+            }
+        }
         return nearest;
     }
 }
