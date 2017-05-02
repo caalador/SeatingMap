@@ -5,6 +5,7 @@ import org.percepta.mgrankvi.client.floor.FloorMapState;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -108,5 +109,11 @@ public class FloorMap extends AbstractComoponents {
 
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    public List<Table> getTables() {
+        List<Table> tables = new ArrayList<>(0);
+        rooms.forEach(room -> tables.addAll(room.getTables()));
+        return tables;
     }
 }

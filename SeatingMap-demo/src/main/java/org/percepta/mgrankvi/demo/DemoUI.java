@@ -38,7 +38,8 @@ public class DemoUI extends UI {
         ImageToLines imageToLines = new ImageToLines();
         List<Line> thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorMarketing.png", new Point(150, 150));
         Room room = component.addRoom(1, thirdLines);
-        room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t5.png", new Point(150, 150))));
+        Table table2 =new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t5.png", new Point(150, 150)));
+        room.addComponent(table2);
 
         thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png", new Point(150, 150));
         room = component.addRoom(1, thirdLines);
@@ -48,7 +49,9 @@ public class DemoUI extends UI {
         room.addComponent(table);
         room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t2.png", new Point(150, 150))));
         room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t3.png", new Point(150, 150))));
-        room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t4.png", new Point(150, 150))));
+        room.addComponent(new Table(imageToLines
+                .getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t4.png",
+                        new Point(150, 150))));
 
         thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png", new Point(150, 150));
         component.addLines(1, thirdLines);
@@ -56,6 +59,9 @@ public class DemoUI extends UI {
         List<Line> pathLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorPaths.png", new Point(150, 150));
 
         component.addPaths(pathLines, 1);
+        component.connectTablesToPaths();
+
+        component.getPath(table.getNodeId(), table2.getNodeId());
 
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();

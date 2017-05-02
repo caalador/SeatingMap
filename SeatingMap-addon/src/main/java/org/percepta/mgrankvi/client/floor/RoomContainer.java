@@ -8,7 +8,7 @@ import org.percepta.mgrankvi.client.map.SeatingMapWidget;
 import org.percepta.mgrankvi.client.room.RoomWidget;
 import org.percepta.mgrankvi.client.helpers.Clicked;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +23,8 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
 
   SeatingMapWidget grid;
 
-  protected List<RoomWidget> rooms = new LinkedList<>();
+  protected List<RoomWidget> rooms = new ArrayList<>(0);
+  protected List<Item> items = new ArrayList<>(0);
 
   public RoomContainer() {
     // Dummy
@@ -51,6 +52,8 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
     if (widget instanceof RoomWidget) {
       final RoomWidget room = (RoomWidget) widget;
       rooms.add(room);
+    } else if( widget instanceof Item) {
+      items.add((Item) widget);
     }
   }
 
@@ -60,6 +63,9 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
 
     for (final RoomWidget room : rooms) {
       room.paint(context);
+    }
+    for(Item item : items) {
+      item.paint(context);
     }
   }
 

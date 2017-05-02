@@ -1,5 +1,6 @@
 package org.percepta.mgrankvi;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,21 +8,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.google.common.collect.Maps;
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
 import org.percepta.mgrankvi.client.map.SeatingMapClientRpc;
 import org.percepta.mgrankvi.client.map.SeatingMapServerRpc;
 import org.percepta.mgrankvi.path.Dijkstra;
 import org.percepta.mgrankvi.path.Node;
+import org.percepta.mgrankvi.util.PathMatrix;
 
 /**
  * @author Mikael Grankvist - Vaadin Ltd
  */
 public class SeatingMap extends AbstractComoponents {
 
-    Map<Integer, FloorMap> floors = Maps.newHashMap();
+    Map<Integer, FloorMap> floors = new HashMap<>();
+    // NodeId - Node map
     Map<Integer, Node> paths = new HashMap<>();
+    Map<Integer, Integer> nodeToFloor = new HashMap<>();
+    // Floor, path Node Matrix
+    Map<Integer, PathMatrix> pathPoints = new HashMap<>();
 
     Integer visibleFloor;
 
@@ -181,6 +186,7 @@ public class SeatingMap extends AbstractComoponents {
      *            floor of added paths
      */
     public void addPaths(Collection<Line> pathLines, int floor) {
+        List<Node> nodes = new ArrayList<>();
 
         for (Line line : pathLines) {
             Optional<Node> node = getNode(line.start);
@@ -207,7 +213,30 @@ public class SeatingMap extends AbstractComoponents {
             }
 
             nodeStart.addConnectedNode(nodeEnd, 1);
+
+            nodes.add(nodeStart);
+            nodes.add(nodeEnd);
+            nodeToFloor.put(nodeStart.getId(), floor);
+            nodeToFloor.put(nodeEnd.getId(), floor);
         }
+
+        pathPoints.put(floor, new PathMatrix(nodes));
+    }
+
+    /**
+     * Find closest node from given paths for all tables.
+     */
+    public void connectTablesToPaths() {
+        floors.entrySet().forEach(entry -> {
+            FloorMap floor = entry.getValue();
+            PathMatrix pathMatrix = pathPoints.get(entry.getKey());
+            floor.getTables().forEach(table -> {
+                Point centerPoint = table.getCenter();
+                Node nearest = pathMatrix.getNearest(centerPoint);
+
+                table.setClosestNodeId(nearest.getId());
+            });
+        });
     }
 
     protected Optional<Node> getNode(Point point) {
@@ -227,7 +256,7 @@ public class SeatingMap extends AbstractComoponents {
      * @param toNode
      *            end node
      */
-    protected void getPath(int fromNode, int toNode) {
+    public void getPath(int fromNode, int toNode) {
         final Node n1 = paths.get(fromNode);
         final Node n2 = paths.get(toNode);
 
@@ -252,10 +281,10 @@ public class SeatingMap extends AbstractComoponents {
         final LinkedList<Node> pathNodes = Dijkstra.getShortestPathTo(n2);
         Map<Integer, List<Node>> nodesByFloor = new HashMap<>();
         for (Node node : pathNodes) {
-            List<Node> nodes = nodesByFloor.get(node.getId());
+            List<Node> nodes = nodesByFloor.get(nodeToFloor.get(node.getId()));
             if (nodes == null) {
                 nodes = new LinkedList<>();
-                nodesByFloor.put(node.getId(), nodes);
+                nodesByFloor.put(nodeToFloor.get(node.getId()), nodes);
             }
             nodes.add(node);
         }

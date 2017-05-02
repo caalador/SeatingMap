@@ -1,10 +1,12 @@
 package org.percepta.mgrankvi;
 
-import org.percepta.mgrankvi.client.geometry.Line;
-import org.percepta.mgrankvi.client.table.TableState;
-
 import java.util.List;
 import java.util.UUID;
+
+import org.percepta.mgrankvi.client.geometry.Line;
+import org.percepta.mgrankvi.client.geometry.Point;
+import org.percepta.mgrankvi.client.helpers.Extents;
+import org.percepta.mgrankvi.client.table.TableState;
 
 /**
  * Created by Mikael on 04/01/17.
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class Table extends AbstractComoponents {
 
     private int closestNodeId;
+    private Extents extents;
+    private Point center;
 
     public Table() {
         setId(UUID.randomUUID().toString());
@@ -39,6 +43,11 @@ public class Table extends AbstractComoponents {
     }
 
     public void addLines(List<Line> lines) {
+        extents = new Extents(lines);
+        center = new Point(
+                (extents.getMaxX() - extents.getMinX()) / 2 + extents.getMinX(),
+                (extents.getMaxY() - extents.getMinY()) / 2
+                        + extents.getMinY());
         getState().lines = lines;
     }
 
@@ -54,12 +63,12 @@ public class Table extends AbstractComoponents {
         return getState(false).nameVisibility;
     }
 
-    public void setClosestNodeId(int nodeId){
+    public void setClosestNodeId(int nodeId) {
         closestNodeId = nodeId;
     }
 
-    public int getNodeId(){
-        return  closestNodeId;
+    public int getNodeId() {
+        return closestNodeId;
     }
 
     @Override
@@ -70,5 +79,9 @@ public class Table extends AbstractComoponents {
     @Override
     protected TableState getState(boolean markAsDirty) {
         return (TableState) super.getState(markAsDirty);
+    }
+
+    public Point getCenter() {
+        return center;
     }
 }
