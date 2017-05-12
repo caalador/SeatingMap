@@ -12,14 +12,18 @@ import org.percepta.mgrankvi.path.Node;
 /**
  * Created by Mikael on 28/04/17.
  */
-public class PathMatrix {
+public class PathMatrix implements NearestSearch {
 
     int maxX = 0;
     int maxY = 0;
 
     Vector<Vector<Set<Node>>> matrix;
 
-    public PathMatrix(List<Node> nodes) {
+    public PathMatrix() {
+    }
+
+    @Override
+    public void setNodes(List<Node> nodes) {
         nodes.forEach(this::evaluateMax);
 
         maxX++;
@@ -54,6 +58,7 @@ public class PathMatrix {
         return (int) value / 100;
     }
 
+    @Override
     public Node getNearest(Point centerPoint) {
         int y = getMaxByHundred(centerPoint.getY());
         int x = getMaxByHundred(centerPoint.getX());

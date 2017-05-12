@@ -1,5 +1,6 @@
 package org.percepta.mgrankvi;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.percepta.mgrankvi.client.geometry.Line;
 import org.percepta.mgrankvi.client.geometry.Point;
@@ -14,6 +17,7 @@ import org.percepta.mgrankvi.client.map.SeatingMapClientRpc;
 import org.percepta.mgrankvi.client.map.SeatingMapServerRpc;
 import org.percepta.mgrankvi.path.Dijkstra;
 import org.percepta.mgrankvi.path.Node;
+import org.percepta.mgrankvi.util.NearestSearch;
 import org.percepta.mgrankvi.util.PathMatrix;
 
 /**
@@ -26,11 +30,13 @@ public class SeatingMap extends AbstractComoponents {
     Map<Integer, Node> paths = new HashMap<>();
     Map<Integer, Integer> nodeToFloor = new HashMap<>();
     // Floor, path Node Matrix
-    Map<Integer, PathMatrix> pathPoints = new HashMap<>();
+    Map<Integer, NearestSearch> pathPoints = new HashMap<>();
+    Class<? extends NearestSearch> nearestImpl;
 
     Integer visibleFloor;
 
     public SeatingMap() {
+        nearestImpl = PathMatrix.class;
         registerRpc(new SeatingMapServerRpc() {
             @Override
             public void findByName(String name) {
@@ -196,7 +202,7 @@ public class SeatingMap extends AbstractComoponents {
                 nodeStart = node.get();
             } else {
                 nodeStart = new Node(
-                        (int) (line.start.getX() + line.start.getY()),
+                        (int) (line.start.getX() + line.start.getY()) + floor,
                         line.start.clonePoint());
                 paths.put(nodeStart.getId(), nodeStart);
             }
@@ -220,7 +226,20 @@ public class SeatingMap extends AbstractComoponents {
             nodeToFloor.put(nodeEnd.getId(), floor);
         }
 
-        pathPoints.put(floor, new PathMatrix(nodes));
+        NearestSearch nearest;
+        try {
+            nearest = nearestImpl.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException
+                | InvocationTargetException | NoSuchMethodException e) {
+            String msg = String.format(
+                    "Failed to create instance for nearest implementation '%s'. using PathMatrix.class instead",
+                    nearestImpl.getSimpleName());
+            Logger.getLogger("SeatingMap").log(Level.WARNING, msg, e);
+            nearest = new PathMatrix();
+        }
+        nearest.setNodes(nodes);
+
+        pathPoints.put(floor, nearest);
     }
 
     /**
@@ -229,10 +248,10 @@ public class SeatingMap extends AbstractComoponents {
     public void connectTablesToPaths() {
         floors.entrySet().forEach(entry -> {
             FloorMap floor = entry.getValue();
-            PathMatrix pathMatrix = pathPoints.get(entry.getKey());
+            NearestSearch nearestSearch = pathPoints.get(entry.getKey());
             floor.getTables().forEach(table -> {
                 Point centerPoint = table.getCenter();
-                Node nearest = pathMatrix.getNearest(centerPoint);
+                Node nearest = nearestSearch.getNearest(centerPoint);
 
                 table.setClosestNodeId(nearest.getId());
             });
@@ -255,22 +274,14 @@ public class SeatingMap extends AbstractComoponents {
      *            start node
      * @param toNode
      *            end node
+     * @return if finding the path was successful
      */
-    public void getPath(int fromNode, int toNode) {
+    public boolean getPath(int fromNode, int toNode) {
         final Node n1 = paths.get(fromNode);
         final Node n2 = paths.get(toNode);
 
         if (n1 == null || n2 == null) {
-            // final VNotification notification = new VNotification();
-            // final Style style = notification.getElement().getStyle();
-            // style.setBackgroundColor("#c8ccd0");
-            // style.setPadding(15.0, Style.Unit.PX);
-            // style.setProperty("border-radius", "4px");
-            // style.setProperty("-moz-border-radius", "4px");
-            // style.setProperty("-webkit-border-radius", "4px");
-            // notification.show("Could not find nodes for both ends!",
-            // VNotification.CENTERED_TOP, null);
-            return;
+            return false;
         }
         for (final Node node : paths.values()) {
             node.minDistance = Double.POSITIVE_INFINITY;
@@ -293,17 +304,7 @@ public class SeatingMap extends AbstractComoponents {
             VisiblePath visiblePath = new VisiblePath(set.getValue());
             floors.get(set.getKey()).addComponent(visiblePath);
         }
-        // final CItem path = new CItem(new LinkedList<Point>(), new
-        // Point(position.getX(), position.getY()));
-        // for (int i = 0; i < pathNodes.size() - 1; i++) {
-        // path.lines.add(new Line(pathNodes.get(i).getPosition(),
-        // pathNodes.get(i + 1).getPosition()));
-        // path.setColor("RED");
-        // }
-        // path.circles.add(new Circle(pathNodes.getFirst().getPosition(), 0, 2
-        // * Math.PI, 4));
-        // path.circles.add(new Circle(pathNodes.getLast().getPosition(), 0, 2 *
-        // Math.PI, 4));
 
+        return true;
     }
 }
