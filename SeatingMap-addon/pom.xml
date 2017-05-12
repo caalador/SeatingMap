@@ -6,7 +6,7 @@
 	<artifactId>SeatingMap</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1-SNAPSHOT</version>
-	<name>Seating map add-on for showing where people are seated at the office</name>
+	<name>Seating map</name>
 
 	<prerequisites>
 		<maven>3</maven>

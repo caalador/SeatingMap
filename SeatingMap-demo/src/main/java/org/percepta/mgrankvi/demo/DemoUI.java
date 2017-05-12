@@ -49,21 +49,32 @@ public class DemoUI extends UI {
                 "/org/percepta/mgrankvi/demo/LeftSide.png",
                 new Point(150, 150));
         room = component.addRoom(1, thirdLines);
-        Table table = new Table(imageToLines.getLines(
-                "/org/percepta/mgrankvi/demo/Table1.png", new Point(150, 150)));
+        List<List<Line>> lineGroups = imageToLines
+                .getLineGroups("/org/percepta/mgrankvi/demo/Tables.png",
+                        new Point(150, 150));
+        for(List<Line> lines: lineGroups) {
+            Table table = new Table(lines);
+            room.addComponent(table);
+        }
+        Table table = room.getTables().get(0);
         table.setName("Terhi Testi");
-        table.setImageUrl(
-                "https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
-        room.addComponent(table);
-        room.addComponent(new Table(
-                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table2.png",
-                        new Point(150, 150))));
-        room.addComponent(new Table(
-                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table3.png",
-                        new Point(150, 150))));
-        room.addComponent(new Table(
-                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table4.png",
-                        new Point(150, 150))));
+                table.setImageUrl(
+                        "https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
+        //        Table table = new Table(imageToLines.getLines(
+//                "/org/percepta/mgrankvi/demo/Table1.png", new Point(150, 150)));
+//        table.setName("Terhi Testi");
+//        table.setImageUrl(
+//                "https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
+//        room.addComponent(table);
+//        room.addComponent(new Table(
+//                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table2.png",
+//                        new Point(150, 150))));
+//        room.addComponent(new Table(
+//                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table3.png",
+//                        new Point(150, 150))));
+//        room.addComponent(new Table(
+//                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table4.png",
+//                        new Point(150, 150))));
 
         thirdLines = imageToLines.getLines(
                 "/org/percepta/mgrankvi/demo/FloorUtilities.png",
@@ -76,10 +87,10 @@ public class DemoUI extends UI {
         component.addPaths(pathLines, 1);
         component.connectTablesToPaths();
 
-        component.getPath(table.getNodeId(), table2.getNodeId());
+//        component.getPath(table.getNodeId(), table2.getNodeId());
 
         component.addSelectionListener(event -> {
-            System.out.println("Click selection event recieved with payload: "
+            System.out.println("Click selection event received with payload: "
                     + event.getRoom() + " :: " + event.getTable());
         });
 

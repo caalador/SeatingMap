@@ -6,7 +6,7 @@
     <artifactId>SeatingMap-demo</artifactId>
     <packaging>war</packaging>
     <version>0.1-SNAPSHOT</version>
-    <name>MyComponent Add-on Demo</name>
+    <name>Seating map Add-on Demo</name>
 
     <prerequisites>
         <maven>3</maven>

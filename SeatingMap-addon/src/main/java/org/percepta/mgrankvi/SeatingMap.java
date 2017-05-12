@@ -58,7 +58,6 @@ public class SeatingMap extends AbstractComoponents {
 
             @Override
             public void itemClick(String roomId, String tableId) {
-                System.out.println("Got item selection!");
                 Room clickedRoom = floors.get(visibleFloor).getRoomById(roomId);
                 Table clickedTable = clickedRoom.getTableById(tableId);
 
@@ -75,16 +74,54 @@ public class SeatingMap extends AbstractComoponents {
         });
     }
 
+    /**
+     * Add a room to the map for given floor from lines.
+     * 
+     * @param floor
+     *            floor to add room to
+     * @param lines
+     *            lines of room
+     * @return created room object
+     */
     public Room addRoom(int floor, List<Line> lines) {
         FloorMap map = getFloor(floor);
         return map.addRoom(lines);
     }
 
+    /**
+     * Add room for given floor to map.
+     * 
+     * @param floor
+     *            floor to add room to
+     * @param room
+     *            room to add
+     */
+    public void addRoom(int floor, Room room) {
+        FloorMap map = getFloor(floor);
+        map.addComponent(room);
+    }
+
+    /**
+     * Add lines to map. These will be drawn, but won't have any special
+     * functionality.
+     * 
+     * @param floor
+     *            floor to add lines to
+     * @param lines
+     *            lines to add
+     */
     public void addLines(int floor, List<Line> lines) {
         FloorMap map = getFloor(floor);
         map.addLines(lines);
     }
 
+    /**
+     * Add listener to be notified of click selection for room and table in map.
+     * 
+     * @param listener
+     *            selection listener
+     * @return handler to remove listener with
+     */
     public RemoveHandler addSelectionListener(SelectionListener listener) {
         selectionEvents.add(listener);
         return () -> selectionEvents.remove(listener);
@@ -99,32 +136,6 @@ public class SeatingMap extends AbstractComoponents {
      */
     public void setAutoToggleTableName(boolean autoToggleName) {
         this.autoToggleName = autoToggleName;
-    }
-
-    /**
-     * Returns first match for name
-     *
-     * @param name
-     *            Name to search for
-     * @return First match or null
-     */
-    private SearchResult getSingleByName(String name) {
-        SearchResult result = new SearchResult();
-        for (FloorMap floor : floors.values()) {
-            for (Room room : floor.getRooms()) {
-                for (Table table : room.getTables()) {
-                    if (table.getName().toLowerCase()
-                            .contains(name.toLowerCase())) {
-                        result.setFloor(floor);
-                        result.setRoom(room);
-                        result.setTable(table);
-                        return result;
-                    }
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -326,5 +337,31 @@ public class SeatingMap extends AbstractComoponents {
             }
         }
         return map;
+    }
+
+    /**
+     * Returns first match for name
+     *
+     * @param name
+     *            Name to search for
+     * @return First match or null
+     */
+    private SearchResult getSingleByName(String name) {
+        SearchResult result = new SearchResult();
+        for (FloorMap floor : floors.values()) {
+            for (Room room : floor.getRooms()) {
+                for (Table table : room.getTables()) {
+                    if (table.getName().toLowerCase()
+                            .contains(name.toLowerCase())) {
+                        result.setFloor(floor);
+                        result.setRoom(room);
+                        result.setTable(table);
+                        return result;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
