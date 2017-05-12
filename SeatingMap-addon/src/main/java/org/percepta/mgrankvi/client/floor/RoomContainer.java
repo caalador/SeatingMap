@@ -46,6 +46,7 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
 
   public void clear() {
     rooms.clear();
+    items.clear();
   }
 
   public void add(final Widget widget) {
@@ -112,6 +113,9 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
     for (final RoomWidget room : rooms) {
       room.movePosition(amountx, amounty);
     }
+    for(Item item : items) {
+      item.movePosition(amountx, amounty);
+    }
   }
 
   public void scale(final double scale) {
@@ -119,12 +123,18 @@ public class RoomContainer extends Item implements Comparable<RoomContainer> {
     for (final RoomWidget room : rooms) {
       room.scale(scale);
     }
+    for(Item item : items) {
+      item.scale(scale);
+    }
   }
 
   public void reset() {
     super.reset();
     for (final RoomWidget room : rooms) {
       room.reset();
+    }
+    for(Item item : items) {
+      item.reset();
     }
   }
 
