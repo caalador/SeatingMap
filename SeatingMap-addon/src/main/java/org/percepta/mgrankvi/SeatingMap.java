@@ -67,8 +67,10 @@ public class SeatingMap extends AbstractComoponents {
                             !clickedTable.getNameVisibility());
                 }
 
-                MapSelectionEvent event = new MapSelectionEvent(clickedRoom, clickedTable);
-                selectionEvents.forEach(selectionListener -> selectionListener.clickSelectionEvent(event));
+                MapSelectionEvent event = new MapSelectionEvent(clickedRoom,
+                        clickedTable);
+                selectionEvents.forEach(selectionListener -> selectionListener
+                        .clickSelectionEvent(event));
             }
         });
     }
@@ -86,6 +88,17 @@ public class SeatingMap extends AbstractComoponents {
     public RemoveHandler addSelectionListener(SelectionListener listener) {
         selectionEvents.add(listener);
         return () -> selectionEvents.remove(listener);
+    }
+
+    /**
+     * Set if the table name visibility should be auto toggled on click. Default
+     * is toggle on click.
+     *
+     * @param autoToggleName
+     *            auto toggle table name visibility
+     */
+    public void setAutoToggleTableName(boolean autoToggleName) {
+        this.autoToggleName = autoToggleName;
     }
 
     /**
