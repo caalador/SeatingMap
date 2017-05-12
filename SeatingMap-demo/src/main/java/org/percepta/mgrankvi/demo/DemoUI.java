@@ -1,5 +1,15 @@
 package org.percepta.mgrankvi.demo;
 
+import javax.servlet.annotation.WebServlet;
+import java.util.List;
+
+import org.percepta.mgrankvi.Room;
+import org.percepta.mgrankvi.SeatingMap;
+import org.percepta.mgrankvi.Table;
+import org.percepta.mgrankvi.client.geometry.Line;
+import org.percepta.mgrankvi.client.geometry.Point;
+import org.percepta.mgrankvi.util.ImageToLines;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -8,15 +18,6 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import org.percepta.mgrankvi.Room;
-import org.percepta.mgrankvi.SeatingMap;
-import org.percepta.mgrankvi.Table;
-import org.percepta.mgrankvi.client.geometry.Line;
-import org.percepta.mgrankvi.client.geometry.Point;
-import org.percepta.mgrankvi.util.ImageToLines;
-
-import javax.servlet.annotation.WebServlet;
-import java.util.List;
 
 @Theme("demo")
 @SpringUI(path = "")
@@ -36,27 +37,41 @@ public class DemoUI extends UI {
         component.setSizeFull();
 
         ImageToLines imageToLines = new ImageToLines();
-        List<Line> thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorMarketing.png", new Point(150, 150));
+        List<Line> thirdLines = imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/RightSide.png",
+                new Point(150, 150));
         Room room = component.addRoom(1, thirdLines);
-        Table table2 =new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t5.png", new Point(150, 150)));
+        Table table2 = new Table(imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/Table5.png", new Point(150, 150)));
         room.addComponent(table2);
 
-        thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales.png", new Point(150, 150));
+        thirdLines = imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/LeftSide.png",
+                new Point(150, 150));
         room = component.addRoom(1, thirdLines);
-        Table table = new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t1.png", new Point(150, 150)));
+        Table table = new Table(imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/Table1.png", new Point(150, 150)));
         table.setName("Terhi Testi");
-        table.setImageUrl("https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
+        table.setImageUrl(
+                "https://vaadin.com/vaadin-theme/images/vaadin/vaadin-logo-small.png");
         room.addComponent(table);
-        room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t2.png", new Point(150, 150))));
-        room.addComponent(new Table(imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t3.png", new Point(150, 150))));
-        room.addComponent(new Table(imageToLines
-                .getLines("/org/percepta/mgrankvi/demo/ThirdFloorSales-t4.png",
+        room.addComponent(new Table(
+                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table2.png",
+                        new Point(150, 150))));
+        room.addComponent(new Table(
+                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table3.png",
+                        new Point(150, 150))));
+        room.addComponent(new Table(
+                imageToLines.getLines("/org/percepta/mgrankvi/demo/Table4.png",
                         new Point(150, 150))));
 
-        thirdLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorUtilities.png", new Point(150, 150));
+        thirdLines = imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/FloorUtilities.png",
+                new Point(150, 150));
         component.addLines(1, thirdLines);
 
-        List<Line> pathLines = imageToLines.getLines("/org/percepta/mgrankvi/demo/ThirdFloorPaths.png", new Point(150, 150));
+        List<Line> pathLines = imageToLines.getLines(
+                "/org/percepta/mgrankvi/demo/Paths.png", new Point(150, 150));
 
         component.addPaths(pathLines, 1);
         component.connectTablesToPaths();
