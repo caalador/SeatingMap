@@ -78,6 +78,11 @@ public class DemoUI extends UI {
 
         component.getPath(table.getNodeId(), table2.getNodeId());
 
+        component.addSelectionListener(event -> {
+            System.out.println("Click selection event recieved with payload: "
+                    + event.getRoom() + " :: " + event.getTable());
+        });
+
         // Show it in the middle of the screen
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);

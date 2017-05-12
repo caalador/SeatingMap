@@ -25,15 +25,17 @@ import org.percepta.mgrankvi.util.PathMatrix;
  */
 public class SeatingMap extends AbstractComoponents {
 
-    Map<Integer, FloorMap> floors = new HashMap<>();
+    private Map<Integer, FloorMap> floors = new HashMap<>();
     // NodeId - Node map
-    Map<Integer, Node> paths = new HashMap<>();
-    Map<Integer, Integer> nodeToFloor = new HashMap<>();
+    private Map<Integer, Node> paths = new HashMap<>();
+    private Map<Integer, Integer> nodeToFloor = new HashMap<>();
     // Floor, path Node Matrix
-    Map<Integer, NearestSearch> pathPoints = new HashMap<>();
-    Class<? extends NearestSearch> nearestImpl;
+    private Map<Integer, NearestSearch> pathPoints = new HashMap<>();
+    private Class<? extends NearestSearch> nearestImpl;
+    private List<SelectionListener> selectionEvents = new ArrayList<>(0);
 
-    Integer visibleFloor;
+    private Integer visibleFloor;
+    private boolean autoToggleName = true;
 
     public SeatingMap() {
         nearestImpl = PathMatrix.class;
@@ -60,12 +62,13 @@ public class SeatingMap extends AbstractComoponents {
                 Room clickedRoom = floors.get(visibleFloor).getRoomById(roomId);
                 Table clickedTable = clickedRoom.getTableById(tableId);
 
-                if (clickedTable != null) {
+                if (autoToggleName && clickedTable != null) {
                     clickedTable.setNameVisibility(
                             !clickedTable.getNameVisibility());
                 }
 
-                System.out.println(clickedRoom + " :: " + clickedTable);
+                MapSelectionEvent event = new MapSelectionEvent(clickedRoom, clickedTable);
+                selectionEvents.forEach(selectionListener -> selectionListener.clickSelectionEvent(event));
             }
         });
     }
@@ -78,22 +81,11 @@ public class SeatingMap extends AbstractComoponents {
     public void addLines(int floor, List<Line> lines) {
         FloorMap map = getFloor(floor);
         map.addLines(lines);
-
     }
 
-    private FloorMap getFloor(int floor) {
-        FloorMap map;
-        if (floors.containsKey(floor)) {
-            map = floors.get(floor);
-        } else {
-            map = new FloorMap(floor);
-            floors.put(floor, map);
-            addComponent(map);
-            if (visibleFloor == null) {
-                visibleFloor = floor;
-            }
-        }
-        return map;
+    public RemoveHandler addSelectionListener(SelectionListener listener) {
+        selectionEvents.add(listener);
+        return () -> selectionEvents.remove(listener);
     }
 
     /**
@@ -258,15 +250,6 @@ public class SeatingMap extends AbstractComoponents {
         });
     }
 
-    protected Optional<Node> getNode(Point point) {
-        for (Node node : paths.values()) {
-            if (node.getPosition().equals(point)) {
-                return Optional.of(node);
-            }
-        }
-        return Optional.empty();
-    }
-
     /**
      * Get the path between given nodes.
      * 
@@ -306,5 +289,29 @@ public class SeatingMap extends AbstractComoponents {
         }
 
         return true;
+    }
+
+    protected Optional<Node> getNode(Point point) {
+        for (Node node : paths.values()) {
+            if (node.getPosition().equals(point)) {
+                return Optional.of(node);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private FloorMap getFloor(int floor) {
+        FloorMap map;
+        if (floors.containsKey(floor)) {
+            map = floors.get(floor);
+        } else {
+            map = new FloorMap(floor);
+            floors.put(floor, map);
+            addComponent(map);
+            if (visibleFloor == null) {
+                visibleFloor = floor;
+            }
+        }
+        return map;
     }
 }
