@@ -1,9 +1,9 @@
 package org.percepta.mgrankvi.path;
 
-import org.percepta.mgrankvi.client.geometry.Point;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.percepta.mgrankvi.client.geometry.Point;
 
 public class Node implements Comparable<Node> {
 
@@ -27,9 +27,11 @@ public class Node implements Comparable<Node> {
      * Link both nodes with same weight in both directions.
      *
      * @param node
+     *            node to connect with this node
      * @param weight
+     *            traversal weight of link
      */
-    public void addConnectedNode(final Node node, final int weight) {
+    public void connectNodes(final Node node, final int weight) {
         links.add(new Link(node, weight));
         node.links.add(new Link(this, weight));
     }

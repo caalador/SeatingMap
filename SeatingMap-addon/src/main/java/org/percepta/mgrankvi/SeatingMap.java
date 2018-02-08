@@ -200,6 +200,33 @@ public class SeatingMap extends AbstractComoponents {
     }
 
     /**
+     * Link two nodes between floors with a defined link weight.
+     *
+     * @param nodePoint
+     *            point for the node
+     * @param floorOne
+     *            first floor containing point
+     * @param floorTwo
+     *            second floor containing point
+     * @param weight
+     *            how much weight to give the node to node path. Higher number
+     *            -> less likely it is used
+     * @throws NodeNotFoundException
+     *             if one of the nodes was not found.
+     */
+    public void linkNodesBetweenFloors(Point nodePoint, int floorOne,
+            int floorTwo, int weight) throws NodeNotFoundException {
+
+        Optional<Node> firstNode = getNode(nodePoint, floorOne);
+        Optional<Node> secondNode = getNode(nodePoint, floorTwo);
+
+        firstNode.orElseThrow(NodeNotFoundException::new);
+        secondNode.orElseThrow(NodeNotFoundException::new);
+
+        firstNode.get().connectNodes(secondNode.get(), weight);
+    }
+
+    /**
      * Add paths by path lines to given floor.
      * 
      * @param pathLines
@@ -211,7 +238,7 @@ public class SeatingMap extends AbstractComoponents {
         List<Node> nodes = new ArrayList<>();
 
         for (Line line : pathLines) {
-            Optional<Node> node = getNode(line.start);
+            Optional<Node> node = getNode(line.start, floor);
 
             Node nodeStart;
             if (node.isPresent()) {
@@ -223,7 +250,7 @@ public class SeatingMap extends AbstractComoponents {
                 paths.put(nodeStart.getId(), nodeStart);
             }
 
-            node = getNode(line.end);
+            node = getNode(line.end, floor);
 
             Node nodeEnd;
             if (node.isPresent()) {
@@ -234,7 +261,7 @@ public class SeatingMap extends AbstractComoponents {
                 paths.put(nodeEnd.getId(), nodeEnd);
             }
 
-            nodeStart.addConnectedNode(nodeEnd, 1);
+            nodeStart.connectNodes(nodeEnd, 1);
 
             nodes.add(nodeStart);
             nodes.add(nodeEnd);
@@ -315,13 +342,9 @@ public class SeatingMap extends AbstractComoponents {
         return true;
     }
 
-    protected Optional<Node> getNode(Point point) {
-        for (Node node : paths.values()) {
-            if (node.getPosition().equals(point)) {
-                return Optional.of(node);
-            }
-        }
-        return Optional.empty();
+    protected Optional<Node> getNode(Point point, int floor) {
+        return Optional.ofNullable(
+                paths.get((int) (point.getX() + point.getY()) + floor));
     }
 
     private FloorMap getFloor(int floor) {

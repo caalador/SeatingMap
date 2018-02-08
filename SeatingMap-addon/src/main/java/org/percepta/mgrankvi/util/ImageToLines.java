@@ -52,6 +52,15 @@ public class ImageToLines {
         return getLinesForPoints(image, points);
     }
 
+    /**
+     * Get lines for given image.
+     *
+     * @param imageFile
+     *            File containing "map" to generate lines from
+     * @param offset
+     *            offset for the collected points
+     * @return list of lines found in image.
+     */
     public List<Line> getLines(String imageFile, Point offset) {
         List<Line> lines = getLines(imageFile);
 
@@ -66,12 +75,30 @@ public class ImageToLines {
         return lines;
     }
 
+    /**
+     * Collect lines from a list into consecutive groups that create convex
+     * polygons. E.g. 4 sided tables.
+     * 
+     * @param imageFile
+     *            image file to parse
+     * @return list of line groups
+     */
     public List<List<Line>> getLineGroups(String imageFile) {
         List<Line> lines = getLines(imageFile);
 
         return collectLinesToConvexPolygonGroup(lines, imageFile);
     }
 
+    /**
+     * Collect lines from a list into consecutive groups that create convex
+     * polygons. E.g. 4 sided tables.
+     * 
+     * @param imageFile
+     *            image file to parse
+     * @param offset
+     *            offset for the collected points
+     * @return list of line groups
+     */
     public List<List<Line>> getLineGroups(String imageFile, Point offset) {
         List<Line> lines = getLines(imageFile, offset);
 
